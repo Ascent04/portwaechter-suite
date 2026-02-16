@@ -1,5 +1,6 @@
 app:
   name: "PortWächter Suite"
+  mode: 1
   root_dir: "/opt/portwaechter"
   timezone: "Europe/Berlin"
   base_currency: "EUR"
@@ -38,3 +39,22 @@ notify:
     enabled: true
     bot_token_env: "TG_BOT_TOKEN"
     chat_id_env: "TG_CHAT_ID"
+    cooldown_min: 30
+
+signals:
+  enabled: true
+  thresholds:
+    pct_move_intraday: 2.0
+    pct_move_close_to_close: 3.0
+    news_keyword_score_min: 3
+
+optimizer:
+  enabled: true
+  rebalance:
+    max_position_weight_pct: 20
+    max_top3_weight_pct: 45
+
+radar:
+  enabled: true
+  sources:
+    rss_feeds: []
