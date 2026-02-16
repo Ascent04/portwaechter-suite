@@ -1,0 +1,28 @@
+app:
+  name: "PortWächter Suite"
+  root_dir: "/opt/portwaechter"
+  timezone: "Europe/Berlin"
+  base_currency: "EUR"
+
+portfolio:
+  source:
+    type: "tr_pdf"
+    inbox: "/opt/portwaechter/data/inbox"
+  validation:
+    total_tolerance_eur: 0.50
+
+marketdata:
+  provider: "stooq"
+  interval_seconds: 300
+  isin_to_symbol: "/opt/portwaechter/config/isin_to_symbol.json"
+
+news:
+  languages: ["de", "en"]
+  translate_to: "de"
+  interval_seconds: 900
+
+notify:
+  telegram:
+    enabled: true
+    bot_token_env: "8294350165:AAFdXXFSJJ4rj040EBYMD-H9oEwZhSbbdcc"
+    chat_id_env: "86077475"
