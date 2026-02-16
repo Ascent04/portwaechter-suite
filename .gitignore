@@ -205,3 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# PortWächter runtime data
+data/
+*.pdf
+*.jsonl
+
+# Local env
+.env
+.env.*
