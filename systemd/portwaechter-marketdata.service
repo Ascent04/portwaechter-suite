@@ -1,0 +1,8 @@
+[Unit]
+Description=PortWächter Marketdata Watcher
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/portwaechter
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.marketdata_watcher.main run

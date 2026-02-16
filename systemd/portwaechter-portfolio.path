@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch for new TR depotauszug PDFs
+
+[Path]
+PathExistsGlob=/opt/portwaechter/data/inbox/*.pdf
+Unit=portwaechter-portfolio.service
+
+[Install]
+WantedBy=multi-user.target

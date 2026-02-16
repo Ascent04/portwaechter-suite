@@ -1,0 +1,11 @@
+[Unit]
+Description=PortWächter Portfolio Ingest
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/portwaechter
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.portfolio_ingest.main run
+
+[Install]
+WantedBy=multi-user.target

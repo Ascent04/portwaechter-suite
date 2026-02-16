@@ -1,0 +1,8 @@
+[Unit]
+Description=PortWächter News Tracker
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/portwaechter
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.news_tracker.main run
