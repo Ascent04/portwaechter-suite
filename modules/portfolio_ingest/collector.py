@@ -43,4 +43,11 @@ def collect_latest_pdf(inbox_dir: str | Path, raw_dir: str | Path) -> dict:
 
     fingerprint_path = raw_path / f"tr_depotauszug_{run_id}.fingerprint.json"
     write_json(fingerprint_path, fingerprint)
+
+    # Prevent endless PathExistsGlob triggers by consuming the inbox file.
+    processed_dir = raw_path / "processed_inbox"
+    ensure_dir(processed_dir)
+    consumed_path = processed_dir / f"{src_pdf.stem}_{run_id}.pdf"
+    shutil.move(str(src_pdf), consumed_path)
+    fingerprint["src_consumed_path"] = str(consumed_path)
     return fingerprint
