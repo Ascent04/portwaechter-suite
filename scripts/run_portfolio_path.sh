@@ -4,25 +4,33 @@ set -euo pipefail
 ROOT="/opt/portwaechter"
 INBOX="$ROOT/data/inbox"
 PROCESSED="$ROOT/data/raw/processed_inbox"
-LOCKFILE="$ROOT/data/cache/portfolio_path.lock"
 
-mkdir -p "$PROCESSED" "$(dirname "$LOCKFILE")"
+mkdir -p "$PROCESSED"
 
-exec 9>"$LOCKFILE"
-if ! flock -n 9; then
-  exit 0
-fi
-
-PDF="$(ls -t "$INBOX"/*.pdf 2>/dev/null | head -n 1 || true)"
-if [[ -z "${PDF}" ]]; then
+# Wenn keine PDFs da sind: Exit 0 (kein Fehler)
+shopt -s nullglob
+pdfs_before=("$INBOX"/*.pdf)
+shopt -u nullglob
+if (( ${#pdfs_before[@]} == 0 )); then
   exit 0
 fi
 
 cd "$ROOT"
+
+# Run Portfolio ingest (kann intern kopieren/umbenennen)
 "$ROOT/.venv/bin/python" -m modules.portfolio_ingest.main run
 
-# Collector already consumes the inbox file; fallback move is for backward compatibility.
-if [[ -f "$PDF" ]]; then
-  ts="$(date +%Y%m%d_%H%M%S)"
-  mv -f "$PDF" "$PROCESSED/$(basename "$PDF" .pdf)_$ts.pdf"
+# Nach Erfolg: Inbox leeren (alles was noch .pdf ist, verschieben)
+shopt -s nullglob
+pdfs_after=("$INBOX"/*.pdf)
+shopt -u nullglob
+
+if (( ${#pdfs_after[@]} == 0 )); then
+  exit 0
 fi
+
+ts="$(date +%Y%m%d_%H%M%S)"
+for f in "${pdfs_after[@]}"; do
+  base="$(basename "$f" .pdf)"
+  mv -f "$f" "$PROCESSED/${base}_${ts}.pdf"
+done

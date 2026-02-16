@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import logging
 import uuid
 from pathlib import Path
 
@@ -16,6 +17,8 @@ from modules.portfolio_ingest.reporter_audit_notify import (
     persist_artifacts,
     render_report_md,
 )
+
+log = logging.getLogger(__name__)
 
 
 def _root_dir(cfg: dict) -> Path:
@@ -48,6 +51,11 @@ def run() -> None:
 
     try:
         inbox = cfg["portfolio"]["source"]["inbox"]
+        if not list(Path(inbox).glob("*.pdf")):
+            log.info("portfolio_ingest: no PDFs in inbox -> skipped")
+            status = "skipped_no_pdf"
+            return {"status": "skipped_no_pdf", "inbox": inbox}
+
         fingerprint = collect_latest_pdf(inbox, _raw_dir(cfg))
 
         run_id = fingerprint["run_id"]

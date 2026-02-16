@@ -29,6 +29,16 @@ def _sort_key(quote: dict) -> tuple[str, str, str]:
     )
 
 
+def _news_candidates(ranked_json: str | Path, news_keyword_score_min: float) -> list[dict]:
+    ranked = read_json(ranked_json) if Path(ranked_json).exists() else {}
+    candidates: list[dict] = []
+    for item in ranked.get("top", []):
+        score = float(item.get("score", 0))
+        if score >= news_keyword_score_min:
+            candidates.append(item)
+    return candidates
+
+
 def compute_price_signals(
     quotes_jsonl: str | Path,
     pct_move_intraday: float = 2.0,
@@ -104,14 +114,11 @@ def compute_news_signals(
     news_keyword_score_min: float = 3,
 ) -> list[dict]:
     _ = _read_jsonl(items_jsonl)
-    ranked = read_json(ranked_json) if Path(ranked_json).exists() else {}
+    candidates = _news_candidates(ranked_json, news_keyword_score_min)
 
     signals: list[dict] = []
-    for item in ranked.get("top", []):
+    for item in candidates:
         score = float(item.get("score", 0))
-        if score < news_keyword_score_min:
-            continue
-
         item_key = item.get("id") or item.get("link") or item.get("title")
         signals.append(
             {

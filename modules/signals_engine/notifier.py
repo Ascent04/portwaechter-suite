@@ -45,7 +45,10 @@ def send_signals(signals: list[dict], cfg: dict) -> None:
 
     pending: list[tuple[str, dict]] = []
     for signal in signals:
-        key = f"signal:{signal.get('id')}:{signal.get('key')}"
+        if signal.get("id") == "MULTI_FACTOR_SIGNAL":
+            key = f"MULTI:{signal.get('isin')}:{signal.get('direction')}"
+        else:
+            key = f"signal:{signal.get('id')}:{signal.get('key')}"
         if should_send(key, now_iso, cooldown, state):
             pending.append((key, signal))
 

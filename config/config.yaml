@@ -1,60 +1,64 @@
 app:
-  name: "PortWächter Suite"
-  mode: 1
-  root_dir: "/opt/portwaechter"
-  timezone: "Europe/Berlin"
-  base_currency: "EUR"
-
+  name: "PortW\xE4chter Suite"
+  mode: 4
+  root_dir: /opt/portwaechter
+  timezone: Europe/Berlin
+  base_currency: EUR
 paths:
-  raw: "/opt/portwaechter/data/raw"
-  audit_jsonl: "/opt/portwaechter/data/audit/portfolio_audit.jsonl"
-
+  raw: /opt/portwaechter/data/raw
+  audit_jsonl: /opt/portwaechter/data/audit/portfolio_audit.jsonl
 portfolio:
   source:
-    type: "tr_pdf"
-    inbox: "/opt/portwaechter/data/inbox"
+    type: tr_pdf
+    inbox: /opt/portwaechter/data/inbox
   validation:
-    total_tolerance_eur: 0.50
-
+    total_tolerance_eur: 0.5
 marketdata:
-  provider: "stooq"
+  provider: stooq
   interval_seconds: 300
   cooldown_min: 60
-  isin_to_symbol: "/opt/portwaechter/config/isin_to_symbol.json"
-
+  isin_to_symbol: /opt/portwaechter/config/isin_to_symbol.json
 news:
-  languages: ["de", "en"]
-  translate_to: "de"
+  languages:
+  - de
+  - en
+  translate_to: de
   interval_seconds: 900
   feed_sources:
-    - name: "IR"
-      url: "https://www.eqs-news.com/feed/"
-    - name: "Regulatory"
-      url: "https://www.sec.gov/rss/news/press.xml"
-    - name: "MarketWatch"
-      url: "https://feeds.content.dowjones.io/public/rss/mw_topstories"
-
+  - name: IR
+    url: https://www.eqs-news.com/feed/
+  - name: Regulatory
+    url: https://www.sec.gov/rss/news/press.xml
+  - name: MarketWatch
+    url: https://feeds.content.dowjones.io/public/rss/mw_topstories
 notify:
   telegram:
     enabled: true
-    bot_token_env: "TG_BOT_TOKEN"
-    chat_id_env: "TG_CHAT_ID"
+    bot_token_env: TG_BOT_TOKEN
+    chat_id_env: TG_CHAT_ID
     cooldown_min: 30
-
 signals:
   enabled: true
   thresholds:
     pct_move_intraday: 2.0
     pct_move_close_to_close: 3.0
     news_keyword_score_min: 3
-
+    min_volume_points: 20
+    volume_spike_ratio: 1.8
+    multi_factor_score_min: 2
+    pct_move_intraday_no_news: 2.5
+    pct_move_close_to_close_no_news: 3.5
 optimizer:
   enabled: true
   rebalance:
     max_position_weight_pct: 20
     max_top3_weight_pct: 45
-
 radar:
   enabled: true
+  min_score: 4
   sources:
-    rss_feeds: []
+    rss_feeds:
+    - https://www.tagesschau.de/wirtschaft/finanzen/index~rss2.xml
+    - https://www.finanzen.net/rss/aktien
+    - https://feeds.finance.yahoo.com/rss/2.0/headline?s=%5EGDAXI&region=US&lang=en-US
+    - https://www.finanznachrichten.de/rss-nachrichten-aktien-deutschland

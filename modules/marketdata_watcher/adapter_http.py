@@ -6,6 +6,11 @@ from io import StringIO
 from pathlib import Path
 from urllib import request
 
+from modules.marketdata_watcher.volume_baseline import (
+    load_volume_baseline,
+    save_volume_baseline,
+    update_volume_baseline,
+)
 from modules.common.utils import append_jsonl, ensure_dir, now_iso_tz, read_json
 
 
@@ -52,6 +57,8 @@ def run_quotes(watchlist_path: str | Path, isin_to_symbol_path: str | Path, out_
     ensure_dir(out_path)
     date_str = datetime.now().strftime("%Y%m%d")
     quotes_path = out_path / f"quotes_{date_str}.jsonl"
+    baseline_path = out_path / "volume_baseline.json"
+    baseline = load_volume_baseline(baseline_path)
 
     count = 0
     for item in watchlist.get("items", []):
@@ -77,7 +84,10 @@ def run_quotes(watchlist_path: str | Path, isin_to_symbol_path: str | Path, out_
         except Exception as exc:
             quote.update({"status": "provider_error", "error": str(exc)})
 
+        if quote.get("status") == "ok":
+            update_volume_baseline(baseline, str(isin), quote.get("volume"))
         append_jsonl(quotes_path, quote)
         count += 1
 
+    save_volume_baseline(baseline_path, baseline)
     return {"quotes_path": str(quotes_path), "count": count}
