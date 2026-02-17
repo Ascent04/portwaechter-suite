@@ -1,0 +1,11 @@
+[Unit]
+Description=PortWächter Watch Alerts
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=ascent
+Group=ascent
+WorkingDirectory=/opt/portwaechter
+EnvironmentFile=/etc/portwaechter/portwaechter.env
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.watch_alerts.main run

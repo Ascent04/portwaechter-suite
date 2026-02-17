@@ -9,6 +9,7 @@ from urllib import parse, request
 from modules.common.state import load_state, mark_sent, save_state, should_send
 from modules.common.utils import now_iso_tz, read_json, write_json
 from modules.decision_engine.expectancy import attach_expectancy
+from modules.decision_engine.risk_integration import apply_position_sizing
 
 
 def _latest(path: Path, pattern: str) -> Path | None:
@@ -217,6 +218,7 @@ def run(cfg: dict) -> dict:
     bias = str(cfg.get("decision", {}).get("bias", "long-only") or "long-only")
     candidates = score_candidates(holdings, radar, signals, news, regime, volume_lights)
     candidates = attach_expectancy(candidates, cfg)
+    candidates = apply_position_sizing(candidates, cfg, regime)
 
     for c in candidates:
         c.update(classify_candidate(c, bias=bias))

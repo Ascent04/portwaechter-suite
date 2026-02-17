@@ -6,6 +6,7 @@ from pathlib import Path
 from statistics import median
 
 from modules.common.utils import now_iso_tz, write_json
+from modules.risk.drawdown import compute_equity_curve, compute_max_drawdown
 
 
 HORIZONS = ("1d", "3d", "5d")
@@ -148,6 +149,7 @@ def build_weekly_report(outcomes: list[dict], cfg: dict) -> dict:
     notes = []
     if by_h["3d"]["n"] < _min_n_horizon(cfg, "3d"):
         notes.append("low_sample_size_3d")
+    max_dd = compute_max_drawdown(compute_equity_curve(outcomes))
 
     return {
         "generated_at": now_iso_tz(cfg.get("app", {}).get("timezone", "Europe/Berlin")),
@@ -157,6 +159,7 @@ def build_weekly_report(outcomes: list[dict], cfg: dict) -> dict:
         "by_regime": by_regime,
         "score_calibration": score_cal,
         "by_bucket": buckets,
+        "risk": {"max_drawdown_pct": max_dd},
         "top_best": ranking[:5],
         "top_worst": list(reversed(ranking[-5:])),
         "notes": notes,

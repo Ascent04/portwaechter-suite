@@ -9,7 +9,7 @@ from modules.performance.outcomes import append_outcome, dedupe_outcomes
 
 def test_append_event_and_load_events(tmp_path) -> None:
     cfg = {"app": {"root_dir": str(tmp_path)}}
-    append_event({"ts": "2026-02-17T10:00:00+01:00", "event_type": "signal", "signal_id": "X"}, cfg)
+    append_event({"event_type": "signal", "signal_id": "X"}, cfg, ts_iso="2026-02-17T12:00:00+01:00")
     rows = load_events(date(2026, 2, 17), date(2026, 2, 17), cfg)
     assert len(rows) == 1
     assert rows[0]["signal_id"] == "X"

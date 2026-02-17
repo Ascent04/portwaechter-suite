@@ -64,8 +64,15 @@ def build_setup_event(setup: dict, cfg: dict) -> dict:
     }
 
 
-def append_event(event: dict, cfg: dict) -> Path:
-    path = _events_path(cfg)
+def append_event(event: dict, cfg: dict, ts_iso: str | None = None) -> Path:
+    ts = str(ts_iso or "")
+    when = None
+    if ts:
+        try:
+            when = datetime.fromisoformat(ts)
+        except ValueError:
+            when = None
+    path = _events_path(cfg, when=when)
     ensure_dir(path.parent)
     append_jsonl(path, event)
     return path

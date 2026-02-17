@@ -2,7 +2,10 @@
 Read-only Aktienportfolio-System: TR-Depotauszug (PDF) -> Snapshot/Analyse/Report, Live-Kurse (best effort), News/Chancen-Ranking. Kein Trading.
 
 ## Setup
-1. Python-Umgebung erstellen und Abhängigkeiten installieren (`pdfminer.six`, `feedparser`, `PyYAML`, `pytest`).
+1. Python-Umgebung erstellen und Abhängigkeiten installieren:
+   - `python -m venv .venv`
+   - `. .venv/bin/activate`
+   - `pip install -r requirements.txt`
 2. Konfiguration unter `config/config.yaml` prüfen.
 3. Laufzeitverzeichnisse sicherstellen:
    - `data/inbox`, `data/raw`, `data/snapshots`, `data/reports`

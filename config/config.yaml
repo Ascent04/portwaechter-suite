@@ -111,3 +111,14 @@ performance:
     - yellow
     - red
     - gray
+watch_alerts:
+  enabled: true
+  max_per_day: 5
+  cooldown_minutes_per_isin: 360
+  min_score: 3
+  prefer_sources:
+  - IR
+  - Ad-hoc
+  - Regulatory
+  include_holdings: true
+  include_radar: true

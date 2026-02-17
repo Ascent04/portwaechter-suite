@@ -30,6 +30,8 @@ def fetch_stooq_latest(symbol: str) -> dict:
     url = STOOQ_URL.format(symbol=symbol)
     with request.urlopen(url, timeout=10) as response:
         body = response.read().decode("utf-8", errors="ignore")
+    if "Exceeded the daily hits limit" in body:
+        return {"symbol": symbol, "status": "rate_limited"}
 
     rows = list(csv.DictReader(StringIO(body)))
     if not rows:

@@ -1,0 +1,10 @@
+[Unit]
+Description=PortWächter Watch Alerts Timer
+
+[Timer]
+OnCalendar=*:0/30
+Persistent=true
+Unit=portwaechter-watchalerts.service
+
+[Install]
+WantedBy=timers.target
