@@ -1,0 +1,10 @@
+[Unit]
+Description=PortWächter Performance Eval Timer
+
+[Timer]
+OnCalendar=Mon..Fri 07:55:00
+Persistent=true
+Unit=portwaechter-performance.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=PortWächter Morning Briefing Timer
+
+[Timer]
+OnCalendar=*-*-* 08:00:00 Europe/Berlin
+Persistent=true
+Unit=portwaechter-briefing.service
+
+[Install]
+WantedBy=timers.target

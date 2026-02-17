@@ -1,39 +1,54 @@
 from __future__ import annotations
 
+import logging
 from datetime import datetime
 from pathlib import Path
 
 from modules.common.utils import ensure_dir, write_json
-from modules.marketdata_watcher.main import run as run_marketdata
-from modules.news_tracker.main import run as run_news
-from modules.optimizer_engine.orchestrator import run as run_optimizer
-from modules.portfolio_ingest.main import run as run_portfolio
-from modules.radar.crawler import pull_radar_feeds
-from modules.radar.notifier import send_radar_top
-from modules.radar.ranker import rank_radar
-from modules.radar.universe import build_universe
-from modules.signals_engine.notifier import send_signals
-from modules.signals_engine.orchestrator import run as run_signals
+
+log = logging.getLogger(__name__)
 
 
 def _mode1() -> None:
+    from modules.marketdata_watcher.main import run as run_marketdata
+    from modules.news_tracker.main import run as run_news
+    from modules.portfolio_ingest.main import run as run_portfolio
+
     run_portfolio()
     run_marketdata()
     run_news()
 
 
 def _mode2(cfg: dict) -> None:
+    from modules.decision_engine.engine import run as run_decision
+    from modules.setup_engine.run import run as run_setups
+    from modules.signals_engine.notifier import send_signals
+    from modules.signals_engine.orchestrator import run as run_signals
+
     _mode1()
     signals = run_signals(cfg)
     send_signals(signals, cfg)
+    run_decision(cfg)
+    run_setups(cfg)
 
 
 def _mode3(cfg: dict) -> None:
+    from modules.optimizer_engine.orchestrator import run as run_optimizer
+
     _mode1()
     run_optimizer(cfg)
 
 
 def _mode4(cfg: dict) -> None:
+    try:
+        from modules.radar.crawler import pull_radar_feeds
+        from modules.radar.notifier import send_radar_top
+        from modules.radar.ranker import rank_radar
+        from modules.radar.universe import build_universe
+    except ModuleNotFoundError as exc:
+        log.warning("mode4 skipped: missing dependency: %s", exc.name)
+        return
+
     if not cfg.get("radar", {}).get("enabled", True):
         return
 

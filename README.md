@@ -41,3 +41,43 @@ Für Mode 1 typischer Betrieb:
 3. `portwaechter-news.timer` (15 min)
 
 Für Mode 2-4 optional einen eigenen Service/Timer auf `python -m modules.main run` anlegen.
+
+## Morning Briefing
+- Runner: `python -m modules.briefing.morning run`
+- systemd:
+  - `systemd/portwaechter-briefing.service`
+  - `systemd/portwaechter-briefing.timer` (`OnCalendar=*-*-* 08:30:00 Europe/Berlin`, `Persistent=true`)
+
+## D+ Performance Engine
+Die Performance-Engine bewertet automatisch alle erzeugten Signale/Setups
+und berechnet Forward Returns (1d/3d/5d) sowie woechentliche KPI-Reports.
+
+### Datenablage
+- Events:
+  - `data/performance/events_YYYYMMDD.jsonl`
+- Outcomes:
+  - `data/performance/outcomes_YYYYMMDD.jsonl`
+- Weekly Reports:
+  - `data/performance/reports/weekly_YYYYWww.json`
+
+### CLI
+- Evaluation:
+  - `python -m modules.performance.main eval --days 30`
+- Weekly Report:
+  - `python -m modules.performance.main report-weekly`
+- Standardlauf:
+  - `python -m modules.performance.main run`
+
+### systemd (optional)
+- Service:
+  - `systemd/portwaechter-performance.service`
+- Timer:
+  - `systemd/portwaechter-performance.timer`
+
+Installieren:
+1. `sudo cp systemd/portwaechter-performance.* /etc/systemd/system/`
+2. `sudo systemctl daemon-reload`
+3. `sudo systemctl enable --now portwaechter-performance.timer`
+
+Status pruefen:
+- `systemctl status portwaechter-performance.timer`

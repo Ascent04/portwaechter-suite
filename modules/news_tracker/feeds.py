@@ -39,6 +39,8 @@ def pull_feeds(feed_sources: list, entities: dict, out_dir: str | Path) -> dict:
 
     date_tag = now_iso_tz().split("T", 1)[0].replace("-", "")
     items_path = out_path / f"items_{date_tag}.jsonl"
+    if not items_path.exists():
+        items_path.write_text("", encoding="utf-8")
 
     terms = []
     for entity in entities.get("entities", []):

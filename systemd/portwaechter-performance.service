@@ -1,0 +1,11 @@
+[Unit]
+Description=PortWächter Performance Eval
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=ascent
+Group=ascent
+WorkingDirectory=/opt/portwaechter
+EnvironmentFile=/etc/portwaechter/portwaechter.env
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.performance.main run

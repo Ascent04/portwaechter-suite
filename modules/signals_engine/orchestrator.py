@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from modules.common.utils import append_jsonl, ensure_dir
+from modules.performance.log_events import append_event, build_signal_event
 from modules.signals_engine.multi_factor import compute_multi_factor_signals
 from modules.signals_engine.rules import compute_news_signals, compute_price_signals
 
@@ -69,5 +70,10 @@ def run(cfg: dict) -> list[dict]:
     out_path = out_dir / f"signals_{datetime.now().strftime('%Y%m%d')}.jsonl"
     for signal in signals:
         append_jsonl(out_path, signal)
+        if signal.get("id") == "MULTI_FACTOR_SIGNAL" and cfg.get("performance", {}).get("enabled", True):
+            try:
+                append_event(build_signal_event(signal, cfg), cfg)
+            except Exception:
+                pass
 
     return signals

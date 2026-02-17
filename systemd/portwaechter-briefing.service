@@ -1,0 +1,10 @@
+[Unit]
+Description=PortWächter Morning Briefing
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=ascent
+Group=ascent
+WorkingDirectory=/opt/portwaechter
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.briefing.morning run
