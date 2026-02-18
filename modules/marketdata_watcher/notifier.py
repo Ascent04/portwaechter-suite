@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import os
+import logging
 from urllib import parse, request
+from urllib.error import HTTPError
+
+log = logging.getLogger(__name__)
 
 
 def _send_telegram(text: str, cfg: dict) -> None:
@@ -19,7 +23,12 @@ def _send_telegram(text: str, cfg: dict) -> None:
     try:
         with request.urlopen(req, timeout=10):
             return
-    except Exception:
+    except HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="ignore") if exc.fp else ""
+        log.warning("telegram_send_failed status=%s body=%s", exc.code, body[:240])
+        return
+    except Exception as exc:
+        log.warning("telegram_send_failed error=%s", exc)
         return
 
 
@@ -29,6 +38,7 @@ def send_market_alerts(alerts: list[dict], cfg: dict) -> None:
 
     lines = ["PortWächter Marketdata Alerts"]
     for alert in alerts[:5]:
-        lines.append(f"- {alert.get('message') or f\"{alert.get('name')} ({alert.get('isin')}): {alert.get('move_pct')}%\"}")
+        fallback = f"{alert.get('name')} ({alert.get('isin')}): {alert.get('move_pct')}%"
+        lines.append(f"- {alert.get('message') or fallback}")
 
     _send_telegram("\n".join(lines), cfg)

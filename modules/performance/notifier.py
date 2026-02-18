@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import os
+import logging
 from urllib import parse, request
+from urllib.error import HTTPError
 
+log = logging.getLogger(__name__)
 
 def _send(text: str, cfg: dict) -> bool:
     tg_cfg = cfg.get("notify", {}).get("telegram", {})
@@ -19,7 +22,12 @@ def _send(text: str, cfg: dict) -> bool:
     try:
         with request.urlopen(req, timeout=12):
             return True
-    except Exception:
+    except HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="ignore") if exc.fp else ""
+        log.warning("telegram_send_failed status=%s body=%s", exc.code, body[:240])
+        return False
+    except Exception as exc:
+        log.warning("telegram_send_failed error=%s", exc)
         return False
 
 
