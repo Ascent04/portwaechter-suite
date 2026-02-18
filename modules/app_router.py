@@ -25,6 +25,7 @@ def _mode2(cfg: dict) -> None:
     from modules.signals_engine.notifier import send_signals
     from modules.signals_engine.orchestrator import run as run_signals
     from modules.watch_alerts.engine import run as run_watch_alerts
+    from modules.performance.warnings import run as run_tactical_warnings
 
     _mode1()
     signals = run_signals(cfg)
@@ -32,6 +33,7 @@ def _mode2(cfg: dict) -> None:
     run_decision(cfg)
     run_setups(cfg)
     run_watch_alerts(cfg)
+    run_tactical_warnings(cfg)
 
 
 def _mode3(cfg: dict) -> None:

@@ -24,8 +24,27 @@ marketdata_alerts:
   enabled: true
   max_per_day: 10
   cooldown_minutes_per_isin: 120
-  min_delta_pct: 0.5
-  threshold_pct: 5.0
+  threshold_cross_only: false
+  group_defaults:
+    holdings:
+      min_delta_pct: 0.7
+      min_direction_pct: 0.9
+      threshold_pct: 3.0
+    radar:
+      min_delta_pct: 1.2
+      min_direction_pct: 1.5
+      threshold_pct: 4.0
+  adaptive:
+    enabled: true
+    lookback_points: 20
+    k_multiplier: 1.2
+    min_floor_pct: 0.6
+    max_floor_pct: 2.5
+    apply_to:
+    - min_delta_pct
+    - min_direction_pct
+  message:
+    max_len: 900
   send_on_direction_change: true
   send_on_threshold_cross: true
   send_on_delta: true
@@ -134,3 +153,108 @@ watch_alerts:
   - Regulatory
   include_holdings: true
   include_radar: true
+telegram_commands:
+  enabled: true
+  poll_interval_minutes: 2
+  allowed_chat_ids_env: TG_CHAT_ID
+  state_file: data/telegram/command_state.json
+  inbox_jsonl: data/telegram/inbox_YYYYMMDD.jsonl
+  actions_jsonl: data/telegram/actions_YYYYMMDD.jsonl
+alert_profiles:
+  current: normal
+  profiles:
+    active:
+      notify:
+        telegram:
+          enabled: true
+      watch_alerts:
+        enabled: true
+        max_per_day: 10
+        min_score: 2
+        cooldown_minutes_per_isin: 180
+        min_intraday_move_for_volume: 1.0
+      marketdata_alerts:
+        enabled: true
+        max_per_day: 14
+        threshold_cross_only: false
+        group_defaults:
+          holdings:
+            min_delta_pct: 0.5
+            min_direction_pct: 0.7
+            threshold_pct: 2.6
+          radar:
+            min_delta_pct: 1.0
+            min_direction_pct: 1.2
+            threshold_pct: 3.6
+      tactical_warnings:
+        enabled: true
+    normal:
+      notify:
+        telegram:
+          enabled: true
+      watch_alerts:
+        enabled: true
+        max_per_day: 5
+        min_score: 3
+        cooldown_minutes_per_isin: 360
+        min_intraday_move_for_volume: 1.5
+      marketdata_alerts:
+        enabled: true
+        max_per_day: 10
+        threshold_cross_only: false
+        group_defaults:
+          holdings:
+            min_delta_pct: 0.7
+            min_direction_pct: 0.9
+            threshold_pct: 3.0
+          radar:
+            min_delta_pct: 1.2
+            min_direction_pct: 1.5
+            threshold_pct: 4.0
+      tactical_warnings:
+        enabled: true
+    quiet:
+      notify:
+        telegram:
+          enabled: true
+      watch_alerts:
+        enabled: true
+        max_per_day: 2
+        min_score: 4
+        cooldown_minutes_per_isin: 720
+        min_intraday_move_for_volume: 2.5
+      marketdata_alerts:
+        enabled: true
+        max_per_day: 4
+        threshold_cross_only: true
+        group_defaults:
+          holdings:
+            min_delta_pct: 1.0
+            min_direction_pct: 1.2
+            threshold_pct: 3.8
+          radar:
+            min_delta_pct: 1.5
+            min_direction_pct: 1.8
+            threshold_pct: 4.8
+      tactical_warnings:
+        enabled: true
+    off:
+      notify:
+        telegram:
+          enabled: false
+      watch_alerts:
+        enabled: false
+      marketdata_alerts:
+        enabled: false
+      tactical_warnings:
+        enabled: false
+      performance:
+        telegram_enabled: false
+tactical_warnings:
+  enabled: true
+  min_n: 30
+  horizons:
+  - 3d
+  warn_if_expectancy_below: 0.0
+  cooldown_hours: 24
+  state_file: data/performance/warn_state.json

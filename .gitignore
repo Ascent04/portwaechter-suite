@@ -208,6 +208,7 @@ __marimo__/
 
 # PortWächter runtime data
 data/
+data/runtime_overrides.json
 *.pdf
 *.jsonl
 

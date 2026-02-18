@@ -1,0 +1,10 @@
+[Unit]
+Description=PortWächter Telegram Command Poller Timer
+
+[Timer]
+OnCalendar=*:0/2
+Persistent=true
+Unit=portwaechter-commands.service
+
+[Install]
+WantedBy=timers.target
