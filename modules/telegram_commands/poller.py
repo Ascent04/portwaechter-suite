@@ -129,8 +129,48 @@ def handle_command(cmd: dict, cfg: dict) -> tuple[str, dict]:
     return help_text(), {"action": "help"}
 
 
-def send_message(token: str, chat_id: str, text: str) -> bool:
-    payload = parse.urlencode({"chat_id": chat_id, "text": text[:2000]}).encode("utf-8")
+def _reply_keyboard(cfg: dict) -> dict | None:
+    tcfg = cfg.get("telegram_commands", {})
+    kcfg = tcfg.get("keyboard", {}) if isinstance(tcfg.get("keyboard"), dict) else {}
+    if not kcfg.get("enabled", True):
+        return None
+
+    raw_rows = kcfg.get(
+        "rows",
+        [
+            ["/status", "/alerts show"],
+            ["/alerts set active", "/alerts set normal"],
+            ["/alerts set quiet", "/alerts set off"],
+            ["/status verbose", "/testalert market"],
+        ],
+    )
+    rows: list[list[str]] = []
+    if isinstance(raw_rows, list):
+        for row in raw_rows:
+            if not isinstance(row, list):
+                continue
+            cleaned = [str(btn).strip() for btn in row if str(btn).strip()]
+            if cleaned:
+                rows.append(cleaned)
+    if not rows:
+        return None
+
+    return {
+        "keyboard": rows,
+        "resize_keyboard": bool(kcfg.get("resize", True)),
+        "one_time_keyboard": False,
+        "is_persistent": bool(kcfg.get("persistent", True)),
+        "input_field_placeholder": str(kcfg.get("placeholder", "PortWächter Befehle"))[:64],
+    }
+
+
+def send_message(token: str, chat_id: str, text: str, cfg: dict) -> bool:
+    payload_obj = {"chat_id": chat_id, "text": text[:2000]}
+    keyboard = _reply_keyboard(cfg)
+    if keyboard:
+        payload_obj["reply_markup"] = json.dumps(keyboard, ensure_ascii=False)
+
+    payload = parse.urlencode(payload_obj).encode("utf-8")
     req = request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=payload, method="POST")
     try:
         with request.urlopen(req, timeout=15):
@@ -165,7 +205,7 @@ def run(cfg: dict) -> None:
         if cmd.get("status") != "accepted":
             continue
         response, action = handle_command(cmd, cfg)
-        sent = send_message(token, str(cmd.get("chat_id")), response)
+        sent = send_message(token, str(cmd.get("chat_id")), response, cfg)
         append_jsonl(
             actions_path,
             {

@@ -35,6 +35,11 @@ cd /opt/portwaechter
 - `/alerts active`
 - `/help`
 
+## Dauerhafte Buttons
+- Reply-Keyboard ist aktiv über `telegram_commands.keyboard.enabled=true`.
+- Buttons bleiben sichtbar mit `persistent=true`.
+- Layout wird über `telegram_commands.keyboard.rows` gesteuert.
+
 ## Beispielantworten
 - Status: `overall=ok`, `marketdata=...`, `briefing_latest=ok|missing`
 - Alerts: aktuelles Profil + Kernschwellen

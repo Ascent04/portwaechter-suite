@@ -33,7 +33,7 @@ def test_status_response_and_reject_wrong_chat(tmp_path: Path, monkeypatch) -> N
     sent: list[str] = []
 
     monkeypatch.setattr(poller, "fetch_updates", lambda token, offset: updates)
-    monkeypatch.setattr(poller, "send_message", lambda token, chat, text: sent.append(text) or True)
+    monkeypatch.setattr(poller, "send_message", lambda token, chat, text, cfg: sent.append(text) or True)
 
     poller.run(cfg)
 

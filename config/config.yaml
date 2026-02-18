@@ -160,6 +160,19 @@ telegram_commands:
   state_file: data/telegram/command_state.json
   inbox_jsonl: data/telegram/inbox_YYYYMMDD.jsonl
   actions_jsonl: data/telegram/actions_YYYYMMDD.jsonl
+  keyboard:
+    enabled: true
+    persistent: true
+    resize: true
+    rows:
+    - - /status
+      - /alerts show
+    - - /alerts set active
+      - /alerts set normal
+    - - /alerts set quiet
+      - /alerts set off
+    - - /status verbose
+      - /testalert market
 alert_profiles:
   current: normal
   profiles:
