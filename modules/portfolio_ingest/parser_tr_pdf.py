@@ -3,8 +3,6 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from pdfminer.high_level import extract_text
-
 from modules.common.utils import parse_de_number
 
 ISIN_RE = re.compile(r"[A-Z]{2}[A-Z0-9]{10}")
@@ -122,6 +120,8 @@ def _extract_prices_values(lines_after_footer: list[str]) -> tuple[list[str], li
 
 
 def parse_tr_depotauszug(pdf_path: str | Path) -> dict:
+    from pdfminer.high_level import extract_text
+
     text = extract_text(str(pdf_path))
     lines = _clean_lines(text)
 

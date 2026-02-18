@@ -18,6 +18,17 @@ marketdata:
   interval_seconds: 300
   cooldown_min: 60
   isin_to_symbol: /opt/portwaechter/config/isin_to_symbol.json
+alerts:
+  state_file: data/alerts/state.json
+marketdata_alerts:
+  enabled: true
+  max_per_day: 10
+  cooldown_minutes_per_isin: 120
+  min_delta_pct: 0.5
+  threshold_pct: 5.0
+  send_on_direction_change: true
+  send_on_threshold_cross: true
+  send_on_delta: true
 news:
   languages:
   - de
@@ -116,6 +127,7 @@ watch_alerts:
   max_per_day: 5
   cooldown_minutes_per_isin: 360
   min_score: 3
+  min_intraday_move_for_volume: 1.5
   prefer_sources:
   - IR
   - Ad-hoc

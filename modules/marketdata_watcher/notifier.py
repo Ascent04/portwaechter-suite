@@ -29,8 +29,6 @@ def send_market_alerts(alerts: list[dict], cfg: dict) -> None:
 
     lines = ["PortWächter Marketdata Alerts"]
     for alert in alerts[:5]:
-        lines.append(
-            f"- {alert.get('name')} ({alert.get('isin')}): {alert.get('move_pct')}%"
-        )
+        lines.append(f"- {alert.get('message') or f\"{alert.get('name')} ({alert.get('isin')}): {alert.get('move_pct')}%\"}")
 
     _send_telegram("\n".join(lines), cfg)
