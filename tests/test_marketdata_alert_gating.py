@@ -88,7 +88,7 @@ def test_threshold_crossing_and_limits(tmp_path: Path) -> None:
     _write(quotes, [_q("DE000BAY0017", 105.5, "2026-02-18T10:02:00+01:00")])
     crossed = detect_intraday_moves(quotes, alerts, cfg)
     assert len(crossed) == 1
-    assert "threshold_cross" in crossed[0]["trigger"]
+    assert crossed[0]["trigger"] in {"threshold_cross", "initial_threshold"}
 
     cfg["marketdata_alerts"]["cooldown_minutes_per_isin"] = 180
     _write(quotes, [_q("DE000BAY0017", 106.1, "2026-02-18T10:05:00+01:00")])

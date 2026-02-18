@@ -26,7 +26,19 @@ journalctl -u portwaechter-marketdata.service -n 120 --no-pager
 journalctl -u portwaechter-watchalerts.service -n 120 --no-pager
 ```
 
-## 5) Duplicate Guard Check
+## 5) Micro-Alert Filter Check (Balanced)
+- Holdings: keine Alerts unter `0.7%`.
+- Radar: keine Alerts unter `1.2%`.
+- Prüfen über Trigger-Log der letzten 2 Stunden:
+```bash
+journalctl -u portwaechter-marketdata.service --since \"2 hours ago\" --no-pager | grep -E \"Trigger|PortWächter Marketdata\"
+```
+- State-Updates prüfen:
+```bash
+cat /opt/portwaechter/data/alerts/state.json | head -n 120
+```
+
+## 6) Duplicate Guard Check
 - Beobachte Telegram 2 Stunden.
 - Es darf keine identische Nachricht pro ISIN mit identischem Wert erneut kommen.
 - Watch-Messages in Quiet Hours (22:00-07:00 Europe/Berlin) dürfen nicht erscheinen.
