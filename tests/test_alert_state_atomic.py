@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 
 from modules.alerts.state import load_alert_state, save_alert_state
@@ -8,10 +9,11 @@ from modules.alerts.state import load_alert_state, save_alert_state
 
 def test_state_roundtrip_atomic(tmp_path: Path) -> None:
     state_path = tmp_path / "state.json"
+    today = date.today().isoformat()
     state = {
-        "date": "2026-02-18",
+        "date": today,
         "counters": {"watch": 2, "marketdata": 1},
-        "watch": {"DE000BASF111": {"last_sent_ts": "2026-02-18T10:00:00+01:00", "dedupe": ["x"]}},
+        "watch": {"DE000BASF111": {"last_sent_ts": f"{today}T10:00:00+01:00", "dedupe": ["x"]}},
         "marketdata": {"DE000BASF111": {"last_pct": 7.4, "last_dir": "up", "last_threshold": True}},
     }
     save_alert_state(str(state_path), state)

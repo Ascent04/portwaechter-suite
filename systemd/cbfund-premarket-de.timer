@@ -1,0 +1,11 @@
+[Unit]
+Description=Run CB Fund Desk Germany pre-market briefing on weekdays
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 08:45:00 Europe/Berlin
+Persistent=true
+AccuracySec=1min
+Unit=cbfund-premarket-de.service
+
+[Install]
+WantedBy=timers.target

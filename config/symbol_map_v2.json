@@ -1,0 +1,87 @@
+{
+  "DE0006305006": {
+    "symbol": "DEZ.DE",
+    "provider": "twelvedata",
+    "name": "DEUTZ AG",
+    "sector": "industrials",
+    "country": "DE"
+  },
+  "DE000A0WMPJ6": {
+    "symbol": "AIXA.DE",
+    "provider": "twelvedata",
+    "name": "AIXTRON SE",
+    "sector": "semiconductors",
+    "country": "DE"
+  },
+  "DE000BASF111": {
+    "symbol": "BAS.DE",
+    "provider": "twelvedata",
+    "name": "BASF SE",
+    "sector": "materials",
+    "country": "DE"
+  },
+  "DE000BAY0017": {
+    "symbol": "BAYN.DE",
+    "provider": "twelvedata",
+    "name": "Bayer AG",
+    "sector": "healthcare",
+    "country": "DE"
+  },
+  "DE000ENER6Y0": {
+    "symbol": "ENR.DE",
+    "provider": "twelvedata",
+    "name": "Siemens Energy AG",
+    "sector": "industrials",
+    "country": "DE"
+  },
+  "DE000VK7S5D5": {
+    "symbol": null,
+    "provider": "provider_unavailable",
+    "name": "Vontobel Financial Products Put 20.03.26 NVIDIA 170",
+    "status": "unsupported",
+    "sector": "structured_products",
+    "country": "DE"
+  },
+  "IE00B9CQXS71": {
+    "symbol": "ZPRG.DE",
+    "provider": "twelvedata",
+    "name": "SPDR S&P Global Dividend Aristocrats UCITS ETF",
+    "sector": "etf",
+    "country": "DE"
+  },
+  "US02079K3059": {
+    "symbol": "GOOGL",
+    "provider": "twelvedata",
+    "name": "Alphabet Inc. Class A",
+    "sector": "technology",
+    "country": "US"
+  },
+  "US1912161007": {
+    "symbol": "KO",
+    "provider": "twelvedata",
+    "name": "The Coca-Cola Company",
+    "sector": "consumer_staples",
+    "country": "US"
+  },
+  "US9344231041": {
+    "symbol": "WBD",
+    "provider": "twelvedata",
+    "name": "Warner Bros. Discovery",
+    "sector": "communication_services",
+    "country": "US"
+  },
+  "CA75974M2040": {
+    "symbol": "RAGE:TSXV",
+    "provider": "twelvedata",
+    "name": "Renegade Gold Inc.",
+    "sector": "materials",
+    "country": "CA"
+  },
+  "CA84652L2075": {
+    "symbol": "SPRK:NEO",
+    "provider": "twelvedata",
+    "name": "Spark Energy Minerals Inc.",
+    "sector": "materials",
+    "country": "CA"
+  }
+}

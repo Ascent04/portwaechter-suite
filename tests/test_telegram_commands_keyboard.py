@@ -33,7 +33,6 @@ def test_send_message_includes_persistent_reply_keyboard(monkeypatch) -> None:
                 "enabled": True,
                 "persistent": True,
                 "resize": True,
-                "rows": [["/status", "/alerts show"]],
             }
         }
     }
@@ -44,4 +43,5 @@ def test_send_message_includes_persistent_reply_keyboard(monkeypatch) -> None:
     assert "reply_markup" in captured
     markup = json.loads(captured["reply_markup"][0])
     assert markup["is_persistent"] is True
-    assert markup["keyboard"][0][0] == "/status"
+    assert markup["keyboard"][0] == ["📊 Status", "💼 Portfolio"]
+    assert markup["keyboard"][2] == ["🎯 Proposals", "🎫 Tickets"]

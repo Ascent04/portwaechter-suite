@@ -1,0 +1,11 @@
+[Unit]
+Description=Run PortWächter V2 every 15 minutes on weekdays
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* *:0/15:00
+Persistent=true
+AccuracySec=1min
+Unit=portwaechter-v2.service
+
+[Install]
+WantedBy=timers.target

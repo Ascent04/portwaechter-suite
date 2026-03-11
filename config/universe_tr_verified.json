@@ -1,0 +1,90 @@
+{
+  "US0079031078": {
+    "symbol": "AMD",
+    "name": "Advanced Micro Devices",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "NASDAQ",
+    "currency": "USD"
+  },
+  "US02079K3059": {
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc. Class A",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "NASDAQ",
+    "currency": "USD"
+  },
+  "US0404131064": {
+    "symbol": "ANET",
+    "name": "Arista Networks Inc.",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "NYSE",
+    "currency": "USD"
+  },
+  "US0382221051": {
+    "symbol": "AMAT",
+    "name": "Applied Materials Inc.",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "NASDAQ",
+    "currency": "USD"
+  },
+  "US0028241000": {
+    "symbol": "ABT",
+    "name": "Abbott Laboratories",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "NYSE",
+    "currency": "USD"
+  },
+  "US1491231015": {
+    "symbol": "CAT",
+    "name": "Caterpillar Inc.",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "NYSE",
+    "currency": "USD"
+  },
+  "DE000BAY0017": {
+    "symbol": "BAYN.DE",
+    "name": "Bayer AG",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "XETRA",
+    "currency": "EUR"
+  },
+  "DE000ENER6Y0": {
+    "symbol": "ENR.DE",
+    "name": "Siemens Energy AG",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "XETRA",
+    "currency": "EUR"
+  },
+  "DE000A0WMPJ6": {
+    "symbol": "AIXA.DE",
+    "name": "AIXTRON SE",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "XETRA",
+    "currency": "EUR"
+  },
+  "DE0006305006": {
+    "symbol": "DEZ.DE",
+    "name": "DEUTZ AG",
+    "tr_verified": true,
+    "asset_type": "stock",
+    "market": "XETRA",
+    "currency": "EUR"
+  },
+  "IE00B9CQXS71": {
+    "symbol": "ZPRG.DE",
+    "name": "SPDR MSCI Europe Technology UCITS ETF",
+    "tr_verified": true,
+    "asset_type": "etf",
+    "market": "XETRA",
+    "currency": "EUR"
+  }
+}

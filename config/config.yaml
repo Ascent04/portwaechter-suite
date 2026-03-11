@@ -4,6 +4,68 @@ app:
   root_dir: /opt/portwaechter
   timezone: Europe/Berlin
   base_currency: EUR
+bot_identity:
+  display_name: "CB Fund Desk"
+notifications:
+  quiet_hours:
+    enabled: true
+    start: "22:00"
+    end: "08:30"
+    timezone: Europe/Berlin
+  allow_critical_during_quiet_hours: true
+data_quality:
+  max_quote_age_minutes: 15
+integration:
+  bridge:
+    proposal_dir: data/integration/signal_proposals
+    consumed_dir: data/integration/consumed
+    default_budget_eur: 5000
+hedgefund:
+  budget_eur: 5000
+  max_positions: 3
+  max_risk_per_trade_pct: 1.0
+  max_total_exposure_pct: 60
+  sizing:
+    high_conf_min_eur: 1000
+    high_conf_max_eur: 1500
+    medium_conf_min_eur: 750
+    medium_conf_max_eur: 1000
+    speculative_min_eur: 0
+    speculative_max_eur: 500
+api_governor:
+  enabled: true
+  provider: twelvedata
+  minute_limit_soft: 45
+  minute_limit_hard: 55
+  per_run_budget: 20
+  batch_only: true
+  allow_symbol_search_runtime: false
+  max_universe_per_run: 30
+  rotate_universe_chunks: true
+  preferred_scan_interval_minutes: 5
+  degrade_mode:
+    enabled: true
+    skip_non_holdings_first: true
+    skip_low_priority_scanner_assets: true
+    holdings_always_first: true
+  state_file: data/api_governor/state.json
+  metrics_file: data/api_governor/usage_YYYYMMDD.jsonl
+  v2_primary_provider: true
+  disable_v1_twelvedata_when_v2_active: true
+organism_evaluation:
+  monthly_cost_usd: 30
+  eurusd_rate_assumption: 0.92
+virus_bridge:
+  tr_universe_path: config/universe_tr_verified.json
+  thresholds:
+    min_reduced_score: 6.0
+    min_approval_score: 6.5
+    min_operational_size_eur: 500
+    borderline_size_multiplier: 0.85
+    stale_size_multiplier: 0.75
+  stop_loss:
+    min_structure_distance_pct: 1.5
+    max_structure_distance_pct: 6.0
 paths:
   raw: /opt/portwaechter/data/raw
   audit_jsonl: /opt/portwaechter/data/audit/portfolio_audit.jsonl
@@ -165,14 +227,15 @@ telegram_commands:
     persistent: true
     resize: true
     rows:
-    - - /status
-      - /alerts show
-    - - /alerts set active
-      - /alerts set normal
-    - - /alerts set quiet
-      - /alerts set off
-    - - /status verbose
-      - /testalert market
+    - - 📈 Kaufen prüfen
+      - 📉 Verkaufen prüfen
+    - - 🛡 Risiko reduzieren
+      - ✅ Halten
+    - - 📋 Tickets
+      - 📊 Status
+    - - 🧠 Top Ideen
+      - ℹ Hilfe
+    - - ⚙ Einstellungen
 alert_profiles:
   current: normal
   profiles:

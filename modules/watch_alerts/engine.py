@@ -3,13 +3,13 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from modules.common.notification_gate import quiet_hours_active
 from modules.alerts.state import load_alert_state, save_alert_state
 from modules.common.utils import read_json
 from modules.performance.notifier import send_performance_text
 from modules.watch_alerts.helpers import (
     build_watch_message,
     extract_intraday_from_reasons,
-    in_quiet_hours,
     is_volume_candidate_allowed,
     latest,
     now_berlin,
@@ -170,7 +170,7 @@ def run(cfg: dict) -> None:
         return
 
     now = now_berlin(cfg.get("app", {}).get("timezone", "Europe/Berlin"))
-    if in_quiet_hours(now):
+    if quiet_hours_active(cfg, now):
         return
 
     try:

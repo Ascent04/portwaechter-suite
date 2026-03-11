@@ -1,15 +1,22 @@
 from __future__ import annotations
 
-import os
 import logging
+import os
 from urllib import parse, request
 from urllib.error import HTTPError
 
+from modules.common.notification_gate import allow_notification
+
 log = logging.getLogger(__name__)
 
-def _send(text: str, cfg: dict) -> bool:
+def _send(text: str, cfg: dict, critical: bool = False) -> bool:
     tg_cfg = cfg.get("notify", {}).get("telegram", {})
     if not tg_cfg.get("enabled", False):
+        return False
+
+    allowed, reason = allow_notification(text, cfg, critical=critical)
+    if not allowed:
+        log.info("telegram_send_suppressed reason=%s", reason)
         return False
 
     token = os.getenv(tg_cfg.get("bot_token_env", "TG_BOT_TOKEN"))
@@ -31,8 +38,8 @@ def _send(text: str, cfg: dict) -> bool:
         return False
 
 
-def send_performance_text(text: str, cfg: dict) -> bool:
-    return _send(text, cfg)
+def send_performance_text(text: str, cfg: dict, critical: bool = False) -> bool:
+    return _send(text, cfg, critical=critical)
 
 
 def send_telegram_performance_summary(report: dict, cfg: dict) -> bool:
