@@ -1,0 +1,10 @@
+[Unit]
+Description=PortWächter Tactical Warning Timer
+
+[Timer]
+OnCalendar=*-*-* 12:00:00
+Persistent=true
+Unit=portwaechter-warnings.service
+
+[Install]
+WantedBy=timers.target

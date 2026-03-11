@@ -1,0 +1,11 @@
+[Unit]
+Description=PortWächter Telegram Command Poller
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=ascent
+Group=ascent
+WorkingDirectory=/opt/portwaechter
+EnvironmentFile=/etc/portwaechter/portwaechter.env
+ExecStart=/opt/portwaechter/.venv/bin/python -m modules.telegram_commands.poller run

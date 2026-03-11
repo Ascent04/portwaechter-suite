@@ -1,4 +1,5 @@
 from pathlib import Path
+import importlib.util
 
 import pytest
 
@@ -6,9 +7,10 @@ from modules.portfolio_ingest.parser_tr_pdf import parse_tr_depotauszug
 
 
 FIXTURE = Path("tests/fixtures/Depotauszug.pdf")
+HAS_PDFMINER = importlib.util.find_spec("pdfminer") is not None
 
 
-@pytest.mark.skipif(not FIXTURE.exists(), reason="Fixture PDF missing")
+@pytest.mark.skipif(not FIXTURE.exists() or not HAS_PDFMINER, reason="Fixture PDF or pdfminer missing")
 def test_parse_footer_values() -> None:
     parsed = parse_tr_depotauszug(FIXTURE)
     footer = parsed["footer"]

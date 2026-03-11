@@ -5,8 +5,8 @@ from pathlib import Path
 
 from modules.common.config import load_config
 from modules.marketdata_watcher.adapter_http import run_quotes
+from modules.marketdata_watcher.alert_engine import detect_intraday_moves
 from modules.marketdata_watcher.notifier import send_market_alerts
-from modules.marketdata_watcher.signals import detect_intraday_moves
 from modules.marketdata_watcher.watchlist import build_watchlist
 
 
@@ -34,8 +34,7 @@ def run() -> None:
     )
     quote_result = run_quotes(watchlist_path, mapping_path, quotes_dir)
 
-    cooldown = int(cfg.get("marketdata", {}).get("cooldown_min", 60))
-    alerts = detect_intraday_moves(quote_result["quotes_path"], alerts_path, cooldown)
+    alerts = detect_intraday_moves(quote_result["quotes_path"], alerts_path, cfg)
     send_market_alerts(alerts, cfg)
 
 

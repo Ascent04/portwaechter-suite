@@ -20,13 +20,11 @@ def _cfg() -> dict:
 
 def _state(day: str = "2026-02-18") -> dict:
     return {
-        "day": day,
-        "sent_today_count": 0,
-        "per_isin_last_sent_ts": {},
-        "dedupe_keys": [],
-        "last_volume_lights": {},
-        "last_regime": None,
-        "last_regime_sent_day": "",
+        "date": day,
+        "counters": {"watch": 0, "marketdata": 0},
+        "watch": {},
+        "marketdata": {},
+        "meta": {"last_volume_lights": {}, "last_regime": None, "last_regime_sent_day": ""},
     }
 
 
@@ -34,7 +32,7 @@ def test_dedupe_prevents_duplicates() -> None:
     cfg = _cfg()
     now = datetime.fromisoformat("2026-02-18T10:00:00+01:00")
     state = _state()
-    state["dedupe_keys"] = ["WATCH:signal:DE000BASF111:2026-02-18"]
+    state["watch"] = {"DE000BASF111": {"last_sent_ts": None, "dedupe": ["WATCH:signal:DE000BASF111:2026-02-18"]}}
     assert should_send("DE000BASF111", "signal", now, cfg, state) is False
 
 
@@ -42,7 +40,7 @@ def test_cooldown_enforced() -> None:
     cfg = _cfg()
     now = datetime.fromisoformat("2026-02-18T10:00:00+01:00")
     state = _state()
-    state["per_isin_last_sent_ts"] = {"DE000BASF111": (now - timedelta(minutes=30)).isoformat()}
+    state["watch"] = {"DE000BASF111": {"last_sent_ts": (now - timedelta(minutes=30)).isoformat(), "dedupe": []}}
     assert should_send("DE000BASF111", "signal", now, cfg, state) is False
 
 
@@ -50,7 +48,7 @@ def test_max_per_day_enforced() -> None:
     cfg = _cfg()
     now = datetime.fromisoformat("2026-02-18T10:00:00+01:00")
     state = _state()
-    state["sent_today_count"] = 2
+    state["counters"]["watch"] = 2
     assert should_send("DE000BASF111", "signal", now, cfg, state) is False
 
 

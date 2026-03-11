@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+from modules.config.runtime import apply_runtime_overrides
 
 
 def load_config(path: str = "config/config.yaml") -> dict[str, Any]:
@@ -26,4 +27,4 @@ def load_config(path: str = "config/config.yaml") -> dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError("Config root must be a mapping")
 
-    return data
+    return apply_runtime_overrides(data)
